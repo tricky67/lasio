@@ -179,7 +179,7 @@ class LASFile(OrderedDictionary):
         try:
             assert reader.version in (1.2, 2)
         except AssertionError:
-            logger.warning("LAS spec version is %s -- neither 1.2 nor 2" % 
+            logger.warning("LAS spec version is %s -- neither 1.2 nor 2" %
                            reader.version)
             if reader.version < 2:
                 reader.version = 1.2
@@ -201,7 +201,7 @@ class LASFile(OrderedDictionary):
             d = data[:, i]
             c.data = d
         self.refresh()
-        
+
     def refresh(self):
         '''Refresh curve names and indices.'''
         n = len(self.curves)
@@ -229,7 +229,7 @@ class LASFile(OrderedDictionary):
         '''2D array of data from LAS file.'''
         return numpy.vstack([c.data for c in self.curves]).T
 
-    def write(self, file_object, version=None, 
+    def write(self, file_object, version=None,
               STRT=None, STOP=None, STEP=None):
         '''Write to a file.
 
@@ -396,12 +396,10 @@ class LASFile(OrderedDictionary):
     def header(self):
         return OrderedDictionary([
             ("~V", self.version),
-            ("~W", self.well), 
+            ("~W", self.well),
             ("~C", self.curves),
             ("~P", self.params),
             ("~O", self.other)])
-    
-
 
 
 class Las(LASFile):
@@ -487,6 +485,19 @@ class Reader(object):
 
     def read_data(self, number_of_curves=None):
         s = self.read_data_string()
+        patterns = [r"(?P<leading> *)(?:TR)(?<trailing>\n| )",              # issue #27
+                    r"(?P<leading> *)(?:\*+)(?<trailing>\n| )",             # issue #21
+                    r"(?P<leading> *)(?:\d*,\d+)(?<trailing>\n| )",         # issue #17
+                    r"(?P<leading> *)(?:-1\.#IO)(?<trailing>\n| )",         # issue #16
+                    ]
+        logger.warning(s)
+        for pattern in patterns:
+            try:
+                s = re.sub(pattern, r"\g<leading>nan\g<trailing>", s)
+            except:
+                logger.error(pattern)
+                raise
+        logger.warning("Fixed:\n" + s)
         if not self.wrap:
             try:
                 arr = numpy.loadtxt(StringIO(s))
@@ -610,7 +621,7 @@ def read_line(line, pattern=None):
         d[key] = value.strip()
         if key == "unit":
             if d[key].endswith("."):
-                d[key] = d[key].strip(".") # see issue #36
+                d[key] = d[key].strip(".")  # see issue #36
     return d
 
 
