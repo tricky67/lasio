@@ -49,4 +49,8 @@ def test_get_curves_method():
     l = read(egfn("sample.las"))
     assert l.get_curve('DT') == l.curves[1]
 
-
+def test_unique_well_id_read_as_str():
+    l = read(egfn("sample_unique_well_id_read_as_str.las"))
+    assert l.well['UWI'].value == '0512337'
+    assert l.well['API'].value == '512337'
+    assert l.params['MDEN'].value == 2710.0

@@ -27,7 +27,7 @@ DEFAULT_ITEMS = {
         HeaderItem('CTRY', '', '', 'COUNTRY'),
         HeaderItem('SRVC', '', '', 'SERVICE COMPANY'),
         HeaderItem('DATE', '', '', 'DATE'),
-        HeaderItem('UWI', '', '', 'UNIQUE WELL ID'),
+        HeaderItem('UWI', '', np.nan, 'UNIQUE WELL ID'),
         HeaderItem('API', '', '', 'API NUMBER')
     ]),
     'Curves': SectionItems([]),
