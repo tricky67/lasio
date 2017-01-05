@@ -24,7 +24,19 @@ def test_add_curve_duplicate():
     # assert l.keys == ['DEPT', 'B', 'B']
     assert [c.descr for c in l.curves] == ['', 'b1', 'b2']
 
-def test_add_curve_multi_lasfiles():
+def test_add_curve_multi_lasfiles_1():
+    l1 = las.LASFile()
+    l2 = las.LASFile()
+    a = np.array([1, 2, 3, 4])
+    b = np.array([5, 9, 1, 4])
+    c = np.array([2, 2, 7, 6])
+    l1.add_curve('DEPT', a)
+    l2.add_curve('DEPT', a)
+    assert id(l1) != id(l2)
+    assert [i.mnemonic for i in l1.curves] == ['DEPT']
+    assert [i.mnemonic for i in l2.curves] == ['DEPT']
+
+def test_add_curve_multi_lasfiles_2():
     l1 = las.LASFile()
     l2 = las.LASFile()
     a = np.array([1, 2, 3, 4])
@@ -34,4 +46,6 @@ def test_add_curve_multi_lasfiles():
     l2.add_curve('DEPT', a)
     l1.add_curve('B', b)
     l2.add_curve('C', c)
-    assert [i.mnemonic for i in l1.curves] == ['DEPT', 'B'] and [i.mnemonic for i in l2.curves] == ['DEPT', 'C']
+    assert id(l1) != id(l2)
+    assert [i.mnemonic for i in l1.curves] == ['DEPT', 'B']
+    assert [i.mnemonic for i in l2.curves] == ['DEPT', 'C']
