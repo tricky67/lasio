@@ -79,8 +79,9 @@ class HeaderItem(OrderedDict):
 class CurveItem(HeaderItem):
 
     def __init__(self, *args, **kwargs):
-        self.data = np.ndarray([])
         super(CurveItem, self).__init__(*args, **kwargs)
+        self.data = np.ndarray([])
+
 
     @property
     def API_code(self):
@@ -94,7 +95,20 @@ class CurveItem(HeaderItem):
                 self.descr, self.original_mnemonic, self.data.shape))
 
 
+class SectionItems(object):
+    
+    # Compose SectionItems per 
+    # http://stackoverflow.com/questions/3945940/what-to-consider-before-subclassing-list
+    # http://stackoverflow.com/questions/14248081/is-the-way-my-class-inherits-list-class-methods-pythonicly-correct
+    
+    def __init__(self):
+        pass
+
+
 class SectionItems(list):
+
+    def __init__(self):
+        super(SectionItems, self).__init__()
 
     def __str__(self):
         rstr_lines = []

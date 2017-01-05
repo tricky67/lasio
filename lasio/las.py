@@ -66,6 +66,7 @@ class LASFile(object):
     '''
 
     def __init__(self, file_ref=None, **kwargs):
+        super(LASFile, self).__init__()
 
         self._text = ''
         self.index_unit = None
@@ -197,7 +198,8 @@ class LASFile(object):
             if key in self.keys():
                 return self.curves[key].data
         else:
-            super(LASFile, self).__getitem__(key)
+            pass
+            # super(LASFile, self).__getitem__(key)
 
     def __setitem__(self, key, value):
         assert NotImplementedError('not yet')
